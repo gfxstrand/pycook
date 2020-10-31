@@ -1,0 +1,116 @@
+% Copyright © 2007 Steven Schulteis
+%
+% PyCook is free software: you can redistribute it and/or modify it under the
+% terms of the GNU General Public License as published by the Free Software
+% Foundation, either version 3 of the License, or (at your option) any later
+% version.
+%
+% PyCook is distributed in the hope that it will be useful, but WITHOUT ANY
+% WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+% FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+% details.
+%
+% You should have received a copy of the GNU General Public License along with
+% PyCook.  If not, see <https://www.gnu.org/licenses/>.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{cookbook}[2007/04/26 Steven Schulteis' custom recipe formatting]
+
+\RequirePackage[table]{xcolor}[2005/12/21]
+\RequirePackage{tabularx}[1999/01/07]
+\RequirePackage{ifthen}
+
+\DeclareOption{dvips}{\PassOptionsToPackage{\CurrentOption}{xcolor}}
+\ProcessOptions\relax
+
+\newenvironment{recipe}%
+{
+	\noindent
+	\ignorespaces
+	\rowcolors{1}{gray!3}{gray!15}
+}%
+{
+	\noindent
+	\ignorespacesafterend
+}
+
+\newenvironment{rscol}%
+{
+	\begin{minipage}[t]{2.25in}}%
+{
+	\end{minipage}
+	\hspace{\fill}
+}
+
+\newenvironment{ingredientlist}%
+{
+	\subsection*{Ingredients}
+	\setlength\extrarowheight{1.5pt}
+	\hrule height 0.8pt \relax
+	\tabularx{2.25in}[t]{>{\raggedright}X r l}
+}%
+{
+	\endtabularx
+	\hrule height 0.8pt \relax
+}
+
+\newenvironment{recipenotes}%
+{
+	\subsection*{Notes}
+}%
+{}
+
+\newenvironment{recipesteps}%
+{
+	\noindent
+	\ignorespaces
+	\vrule
+	\hspace{\fill}
+	\begin{minipage}[t]{4in}
+	\subsection*{Instructions}
+	\begin{enumerate}
+}%
+{
+	\end{enumerate}
+	\end{minipage}
+	\noindent
+	\ignorespacesafterend
+}
+
+\newcommand{\ingredient}[3]{#1\hspace{\fill} & #2 & #3 \\}
+
+\newcommand{\recipesection}[2][none]%
+{
+	\ifthenelse{\equal{#1}{none}}%
+	{
+	\section*{#2}
+	}%
+	{
+	\section*{#2 (#1)}
+	}
+
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect\numberline{}#2}
+}
+
+\newcommand{\recipesubsection}[2][none]%
+{
+	\ifthenelse{\equal{#1}{none}}%
+	{
+	\subsection*{#2}
+	}%
+	{
+	\subsection*{#2 (#1)}
+	}
+
+	\phantomsection
+%	\addcontentsline{toc}{subsection}{\protect\numberline{}#1}
+}
+
+\newcommand{\cookbookchapter}[1]%
+{
+	\chapter*{#1}
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\protect\numberline{}#1}
+}
+

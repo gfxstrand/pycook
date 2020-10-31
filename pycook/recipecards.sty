@@ -1,0 +1,132 @@
+% Copyright © 2020 Jason Ekstrand
+%
+% PyCook is free software: you can redistribute it and/or modify it under the
+% terms of the GNU General Public License as published by the Free Software
+% Foundation, either version 3 of the License, or (at your option) any later
+% version.
+%
+% PyCook is distributed in the hope that it will be useful, but WITHOUT ANY
+% WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+% FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+% details.
+%
+% You should have received a copy of the GNU General Public License along with
+% PyCook.  If not, see <https://www.gnu.org/licenses/>.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{recipecards}[2020/10/31 Recipe card formatting]
+
+\RequirePackage[table]{xcolor}[2005/12/21]
+\RequirePackage{tabularx}[1999/01/07]
+\RequirePackage{ifthen}
+\RequirePackage{titlesec}
+\RequirePackage{enumitem}
+\RequirePackage[paperwidth=6in,paperheight=4in,hmargin=.25in,vmargin=.25in]{geometry}
+
+\DeclareOption{dvips}{\PassOptionsToPackage{\CurrentOption}{xcolor}}
+\ProcessOptions\relax
+
+\titlespacing*{\section}{0pt}{0ex}{-1ex}
+\titlespacing*{\subsection}{0pt}{1ex}{1ex}
+
+\newenvironment{recipe}%
+{
+	\noindent
+	\ignorespaces
+	\rowcolors{1}{gray!3}{gray!35}
+}%
+{
+	\noindent
+	\ignorespacesafterend
+}
+
+\newenvironment{rscol}{}{}
+
+\newcounter{IngredientColumnCount}
+
+\newenvironment{ingredientlist}%
+{
+	\subsection*{Ingredients}
+	\setlength\extrarowheight{1.5pt}
+    \setcounter{IngredientColumnCount}{0}
+	\tabularx{\textwidth}[t]{>{\raggedright}X r l >{\raggedright}X r l}
+    \noalign{\hrule height 0.8pt}
+}%
+{
+    \ifthenelse{\value{IngredientColumnCount}=1}{& & & \\}{\\}
+    \noalign{\hrule height 0.8pt}
+	\endtabularx
+}
+
+\newenvironment{recipenotes}%
+{
+	\subsection*{Notes}
+}%
+{}
+
+\newenvironment{recipesteps}%
+{
+	\noindent
+	\ignorespaces
+	\hspace{\fill}
+	\subsection*{Instructions}
+	\begin{enumerate}[leftmargin=18pt]
+}%
+{
+	\end{enumerate}
+	\noindent
+	\ignorespacesafterend
+}
+
+\newcommand{\ingredient}[3]{
+    \ifthenelse{\value{IngredientColumnCount}>0}%
+    {
+        \ifthenelse{\value{IngredientColumnCount}=1}%
+        {
+            &
+        }%
+        {
+            % IngredientColumnCount = 2
+            \\
+            \setcounter{IngredientColumnCount}{0}
+        }
+    }{}
+    \addtocounter{IngredientColumnCount}{1}
+    #1\hspace{\fill} & #2 & #3
+}
+
+\newcommand{\recipesection}[2][none]%
+{
+	\ifthenelse{\equal{#1}{none}}%
+	{
+	\section*{#2}
+	}%
+	{
+	\section*{#2 (#1)}
+	}
+
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect\numberline{}#2}
+}
+
+\newcommand{\recipesubsection}[2][none]%
+{
+	\ifthenelse{\equal{#1}{none}}%
+	{
+	\subsection*{#2}
+	}%
+	{
+	\subsection*{#2 (#1)}
+	}
+
+	\phantomsection
+%	\addcontentsline{toc}{subsection}{\protect\numberline{}#1}
+}
+
+\newcommand{\cookbookchapter}[1]%
+{
+	\chapter*{#1}
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\protect\numberline{}#1}
+}
+
