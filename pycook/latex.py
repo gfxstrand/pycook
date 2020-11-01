@@ -65,7 +65,7 @@ _RECIPE_TEMPLATE = mako.template.Template(r"""
 % endif
 \begin{rscol}
 \begin{ingredientlist}
-% for i in recipe.ingredients:
+% for i in ingredient_shuffle(recipe.ingredients):
     <%
         if i.qty:
             qty_num = to_latex(i.qty.num)
@@ -93,9 +93,10 @@ _RECIPE_TEMPLATE = mako.template.Template(r"""
 \end{recipe}
 """)
 
-def render_recipe(r):
+def render_recipe(r, ingredient_shuffle=lambda i : i):
     try:
-        return _RECIPE_TEMPLATE.render(recipe=r, to_latex=to_latex)
+        return _RECIPE_TEMPLATE.render(recipe=r, to_latex=to_latex,
+                                       ingredient_shuffle=ingredient_shuffle)
     except Exception:
         # In the event there's an error, this imports some helpers from mako
         # to print a useful stack trace and prints it, then exits with
@@ -152,12 +153,21 @@ _RECIPE_CARD_TEMPLATE = mako.template.Template(r"""
 
 \pagestyle{empty}
 
+<%
+def shuffle_two_columns(list):
+    half_len = (len(list) + 1) // 2
+    for i in range(half_len):
+        yield list[i]
+        if half_len + i < len(list):
+            yield list[half_len + i]
+%>
+
 \begin{document}
 % for chapter in cookbook.chapters:
 % for recipe in chapter.recipes:
 \clearpage
 \ifodd\value{page}\else\hbox{}\newpage\fi
-${recipe.to_latex()}
+${recipe.to_latex(ingredient_shuffle=shuffle_two_columns)}
 % endfor
 % endfor
 
