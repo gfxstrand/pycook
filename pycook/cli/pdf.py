@@ -96,7 +96,7 @@ def main(args):
 
 def setup_subparser(subparser):
     subparser.add_argument('-s', '--style', type=str, default='cookbook',
-                           choices=['cookbook', '4x3cards', 'avery5389'],
+                           choices=['cookbook', '4x6cards', 'avery5389'],
                            help='Style of PDF to generate')
     subparser.add_argument('-S', '--separate', action='store_const',
                            const=True, default=False,
