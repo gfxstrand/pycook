@@ -64,6 +64,7 @@ class Cookbook(object):
                 recipes.sort(key=lambda r : r.name)
                 chapters.append(Chapter(c_title, c_description, recipes))
 
+        chapters.sort(key=lambda r : r.title)
         return Cookbook(cb_title, cb_author, chapters)
 
     def to_latex(self, **kwargs):
