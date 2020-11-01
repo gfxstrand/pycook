@@ -52,7 +52,10 @@ class Unit(object):
     def to_str(self, num=None, plural=False):
         # If specified, num overrides plural
         if num is not None:
-            plural = num > 1
+            if isinstance(num, Range):
+                plural = num.max_num > 1
+            else:
+                plural = num > 1
         return self.plural if plural else self.text
 
     @staticmethod
@@ -127,8 +130,19 @@ _VULGAR_FRACTIONSS = {
     (7, 8): '⅞',
 }
 
+class Range(object):
+    def __init__(self, min_num, max_num):
+        assert isinstance(min_num, (int, fractions.Fraction, decimal.Decimal))
+        assert isinstance(max_num, (int, fractions.Fraction, decimal.Decimal))
+        self.min_num = min_num
+        self.max_num = max_num
+
 def number_to_str(n, vulgar=False):
-    if isinstance(n, (int, decimal.Decimal)):
+    if isinstance(n, Range):
+        dash = '--' if vulgar else ' -- '
+        return number_to_str(n.min_num, vulgar) + dash + \
+               number_to_str(n.max_num, vulgar)
+    elif isinstance(n, (int, decimal.Decimal)):
         return str(n)
     elif isinstance(n, fractions.Fraction):
         whole = n.numerator // n.denominator
@@ -151,13 +165,16 @@ def number_to_str(n, vulgar=False):
         assert False, 'Not a number type'
 
 class Quantity(object):
-    RE = re.compile(r'(?:' + NUMBER_RE.pattern + r')' +
+    RE = re.compile(r'(?:(?:' + NUMBER_RE.pattern + r')\s*-+\s*)?' +
+                    r'(?:' + NUMBER_RE.pattern + r')' +
                     r'(?:\s*' + Unit.RE.pattern + r')?')
-    _RE = re.compile(r'(?P<num>' + NUMBER_RE.pattern + r')' +
+    _RE = re.compile(r'(?:(?P<min_num>' + NUMBER_RE.pattern + r')\s*-+\s*)?' +
+                     r'(?P<num>' + NUMBER_RE.pattern + r')' +
                      r'(?:\s*(?P<unit>' + Unit.RE.pattern + r'))?')
 
     def __init__(self, num, unit=None):
-        assert isinstance(num, (int, fractions.Fraction, decimal.Decimal))
+        assert isinstance(num, (Range, int, fractions.Fraction,
+                                decimal.Decimal))
         assert num != 0
         assert unit is None or isinstance(unit, Unit)
         self.num = num
@@ -178,6 +195,9 @@ class Quantity(object):
             m = m.group(0)
         m = Quantity._RE.match(m)
         num = number_from_str(m.group('num'))
+        if m.group('min_num'):
+            min_num = number_from_str(m.group('min_num'))
+            num = Range(min_num, num)
         if m.group('unit'):
             unit = Unit.from_match(m.group('unit'))
         else:

@@ -32,6 +32,8 @@ def to_latex(t):
         if t.unit:
             s += ' ' + t.unit.to_str(num=t.num)
         return s
+    elif isinstance(t, units.Range):
+        return to_latex(t.min_num) + '--' + to_latex(t.max_num)
     elif isinstance(t, (int, decimal.Decimal)):
         return str(t)
     elif isinstance(t, fractions.Fraction):
