@@ -75,7 +75,10 @@ class Recipe(object):
         r.from_url = str(data['url']) if 'url' in data else None
         r.ingredients = [Ingredient.parse(i) for i in data['ingredients']]
         r.instructions = [_tokenize_str(s) for s in data['instructions']]
-        r.note = data.get('note')
+        if 'note' in data:
+            r.note = _tokenize_str(data['note'])
+        else:
+            r.note = None
 
         return r
 
