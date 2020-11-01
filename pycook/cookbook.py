@@ -70,5 +70,5 @@ class Cookbook(object):
     def to_latex(self, **kwargs):
         return latex.render_cookbook(self, **kwargs)
 
-    def dump_rst(self, path):
-        rst.dump_cookbook(self, path)
+    def dump_rst(self, path, **kwargs):
+        rst.dump_cookbook(self, path, **kwargs)

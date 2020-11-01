@@ -82,8 +82,8 @@ class Recipe(object):
 
         return r
 
-    def to_latex(self):
-        return latex.render_recipe(self)
+    def to_latex(self, **kwargs):
+        return latex.render_recipe(self, **kwargs)
 
-    def to_rst(self):
-        return rst.render_recipe(self)
+    def to_rst(self, **kwargs):
+        return rst.render_recipe(self, **kwargs)
