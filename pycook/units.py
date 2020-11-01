@@ -76,7 +76,7 @@ PACKAGE = Unit('pkg', 'pkg.')
 
 # General units
 MINUTE = Unit('min', 'min.')
-CLOVE = Unit('clove', 'clove')
+CLOVE = Unit('clove', 'clove', plural='cloves')
 
 # English Units
 CUP = Unit('cup', 'cup', plural='cups', is_english=True)
