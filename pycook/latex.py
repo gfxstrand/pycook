@@ -18,9 +18,21 @@ import decimal
 import fractions
 import mako.template
 import os
+import re
+
+_LATEX_SPECIAL_RE = re.compile(r'([\\\$\#\^&%_{}])')
 
 def escape_str_for_latex(s):
-    return s.replace('&', '\\&')
+    # https://tex.stackexchange.com/questions/34580/escape-character-in-latex
+    def repl(m):
+        if m.group(0) == '\\':
+            return '$\\backslash$'
+        elif m.group(0) == '~':
+            return '\\texttt{\\~{}}'
+        else:
+            return '\\' + m.group(0)
+
+    return _LATEX_SPECIAL_RE.sub(repl, s)
 
 def to_latex(t):
     if isinstance(t, list):
