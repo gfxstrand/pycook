@@ -77,6 +77,7 @@ PACKAGE = Unit('pkg', 'pkg.')
 # General units
 MINUTE = Unit('min', 'min.')
 CLOVE = Unit('clove', 'clove', plural='cloves')
+STRIP = Unit('strip', 'strip', plural='strips')
 
 # English Units
 CUP = Unit('cup', 'cup', plural='cups', is_english=True)
@@ -89,6 +90,7 @@ INCH = Unit('in', 'in.', is_english=True)
 
 # Metric Units
 GRAM = Unit('g', 'g', is_metric=True)
+MILLILETER = Unit('ml', 'ml', is_metric=True)
 DEGREES_CELSIUS = Unit('degC', '°C', is_metric=True)
 CENTIMETER = Unit('cm', 'cm', is_metric=True)
 
