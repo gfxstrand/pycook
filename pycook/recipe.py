@@ -70,7 +70,7 @@ class Recipe(object):
                 raise Exception('Invalid section "{}"'.format(section))
 
         r = Recipe()
-        r.name = str(data['name'])
+        r.name = _tokenize_str(str(data['name']))
         r.from_name = str(data['from']) if 'from' in data else None
         r.from_url = str(data['url']) if 'url' in data else None
         r.ingredients = [Ingredient.parse(i) for i in data['ingredients']]

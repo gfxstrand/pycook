@@ -67,7 +67,7 @@ def to_latex(t):
 
 
 _RECIPE_TEMPLATE = mako.template.Template(r"""
-\recipesection{${recipe.name}}
+\recipesection{${to_latex(recipe.name)}}
 \begin{recipe}
 % if recipe.from_name:
 %% ${to_latex(recipe.from_name)}

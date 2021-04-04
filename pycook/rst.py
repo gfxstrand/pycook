@@ -105,7 +105,7 @@ ${'='*len(to_rst(cookbook.title))}
 """)
 
 def to_filename(s):
-    return re.sub(r'\W+', '-', s.lower())
+    return re.sub(r'\W+', '-', to_rst(s).lower())
 
 def dump_cookbook(cb, path):
     os.makedirs(path, exist_ok=True)
