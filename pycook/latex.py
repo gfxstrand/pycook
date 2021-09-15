@@ -128,6 +128,7 @@ _COOKBOOK_TEMPLATE = mako.template.Template(r"""
 
 \usepackage{units}
 \usepackage{gensymb}
+\usepackage{textcomp}
 \usepackage[headings]{fullpage}
 \usepackage[letterpaper]{hyperref}
 \usepackage{url}
@@ -156,6 +157,7 @@ _RECIPE_CARD_TEMPLATE = mako.template.Template(r"""
 
 \usepackage{units}
 \usepackage{gensymb}
+\usepackage{textcomp}
 \usepackage[headings]{fullpage}
 \usepackage[letterpaper]{hyperref}
 \usepackage{url}
