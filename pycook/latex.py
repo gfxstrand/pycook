@@ -20,7 +20,7 @@ import mako.template
 import os
 import re
 
-_LATEX_SPECIAL_RE = re.compile(r'([\\\$\#\^&%_{}])')
+_LATEX_SPECIAL_RE = re.compile(r'([\\\$\#\^&%_{}°])')
 
 def escape_str_for_latex(s):
     # https://tex.stackexchange.com/questions/34580/escape-character-in-latex
@@ -29,6 +29,8 @@ def escape_str_for_latex(s):
             return '$\\backslash$'
         elif m.group(0) == '~':
             return '\\texttt{\\~{}}'
+        if m.group(0) == '°':
+            return '{\\textdegree}'
         else:
             return '\\' + m.group(0)
 
@@ -38,11 +40,11 @@ def to_latex(t):
     if isinstance(t, list):
         return ''.join(to_latex(i) for i in t)
     elif isinstance(t, units.Unit):
-        return t.to_str()
+        return escape_str_for_latex(t.to_str())
     elif isinstance(t, units.Quantity):
         s = to_latex(t.num)
         if t.unit:
-            s += ' ' + t.unit.to_str(num=t.num)
+            s += ' ' + escape_str_for_latex(t.unit.to_str(num=t.num))
         return s
     elif isinstance(t, units.Range):
         return to_latex(t.min_num) + '--' + to_latex(t.max_num)
