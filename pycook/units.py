@@ -76,6 +76,8 @@ PACKAGE = Unit('pkg', 'pkg.')
 
 # General units
 MINUTE = Unit('min', 'min.')
+HOUR = Unit('hour', 'hour')
+DAY = Unit('day', 'day', plural='days')
 CLOVE = Unit('clove', 'clove', plural='cloves')
 STRIP = Unit('strip', 'strip', plural='strips')
 
@@ -87,6 +89,7 @@ POUND = Unit('lb', 'lb.', is_english=True)
 OUNCE = Unit('oz', 'oz.', is_english=True)
 DEGREES_FAHRENHEIT = Unit('degF', '°F', is_english=True)
 INCH = Unit('in', 'in.', is_english=True)
+GALLON = Unit('gal', 'gal.', is_english=True)
 
 # Metric Units
 GRAM = Unit('g', 'g', is_metric=True)
