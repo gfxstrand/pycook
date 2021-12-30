@@ -188,6 +188,18 @@ class Quantity(object):
     def __repr__(self):
         return 'Quantity("' + self.to_str() + '")'
 
+    def __eq__(self, other):
+        if self.unit != other.unit:
+            return False
+
+        return self.num == other.num
+
+    def __lt__(self, other):
+        if self.unit != other.unit:
+            return False
+
+        return self.num < other.num
+
     def to_str(self, vulgar=False):
         s = number_to_str(self.num, vulgar)
         if self.unit:
