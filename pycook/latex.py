@@ -162,10 +162,21 @@ _RECIPE_CARD_TEMPLATE = mako.template.Template(r"""
 \usepackage[letterpaper]{hyperref}
 \usepackage{url}
 \usepackage{${pkgpath}/recipecards}
+\usepackage{background}
 
 
 \title{${to_latex(cookbook.title)}}
 \author{${to_latex(cookbook.author)}}
+
+% if background:
+\backgroundsetup{
+scale=1,
+color=black,
+opacity=0.4,
+angle=0,
+contents={\includegraphics[width=\paperwidth,height=\paperheight]{${background}}}
+}
+% endif
 
 \pagestyle{empty}
 
@@ -190,13 +201,15 @@ ${recipe.to_latex(ingredient_shuffle=shuffle_two_columns)}
 \end{document}
 """)
 
-def render_cookbook(b, style='cookbook'):
+def render_cookbook(b, style='cookbook', background=None):
     pkgpath = os.path.dirname(os.path.abspath(__file__))
     if style == 'cookbook':
+        assert background is None
         return _COOKBOOK_TEMPLATE.render(cookbook=b, to_latex=to_latex,
                                          pkgpath=pkgpath)
     elif style == '4x6cards':
         return _RECIPE_CARD_TEMPLATE.render(cookbook=b, to_latex=to_latex,
+                                            background=background,
                                             pkgpath=pkgpath)
     else:
         assert False

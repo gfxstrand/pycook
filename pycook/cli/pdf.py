@@ -64,9 +64,14 @@ def main(args):
 
     tmpdir = tempfile.mkdtemp(prefix='cookbook')
     try:
+        background = None
+        if args.background:
+            background = os.path.basename(args.background)
+            shutil.copyfile(args.background, os.path.join(tmpdir, background))
+
         c = Cookbook.load(args.input)
         with open(os.path.join(tmpdir, 'cookbook.tex'), 'w') as f:
-            f.write(c.to_latex(style=style))
+            f.write(c.to_latex(style=style, background=background))
 
         subprocess.run([
             'latexmk',
@@ -101,6 +106,7 @@ def setup_subparser(subparser):
     subparser.add_argument('-S', '--separate', action='store_const',
                            const=True, default=False,
                            help='Produce separate front and back PDFs')
+    subparser.add_argument('-b', '--background', help='Background image')
     subparser.add_argument('input', help='Name of input file', )
     subparser.add_argument('output', help='Name of output file')
     subparser.set_defaults(func=main)
