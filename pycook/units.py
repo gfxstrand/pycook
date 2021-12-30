@@ -76,7 +76,7 @@ PACKAGE = Unit('pkg', 'pkg.')
 
 # General units
 MINUTE = Unit('min', 'min.')
-HOUR = Unit('hour', 'hour')
+HOUR = Unit('hour', 'hour', plural='hours')
 DAY = Unit('day', 'day', plural='days')
 CLOVE = Unit('clove', 'clove', plural='cloves')
 STRIP = Unit('strip', 'strip', plural='strips')
